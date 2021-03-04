@@ -35,11 +35,11 @@ def get_live_matches(min_avg_rating=0, max_avg_rating=3000, count=100,
     curr_games_url = 'https://aoe2.net/api/matches?game=aoe2de' \
         '&count={!s}&since={!s}'.format(count, start_epochtime)
     games = json.loads(request.urlopen(curr_games_url).read().decode())
-    print('------------------------------')
+    valid_games = []
     for game in games:
         if match_in_range(game, min_avg_rating, max_avg_rating):
-            print_match_info(game)
-            print('------------------------------')
+            valid_games.append(match_info_string(game))
+    return valid_games
 
 def match_in_range(game, min_avg_rating, max_avg_rating):
     """Checks whether the game is in the specified elo range.
@@ -63,8 +63,8 @@ def match_in_range(game, min_avg_rating, max_avg_rating):
             and min_avg_rating <= game['average_rating']
             and game['average_rating'] <= max_avg_rating)
 
-def print_match_info(game):
-    """Prints human-readable information about the match.
+def match_info_string(game):
+    """Returns human-readable information about the match.
 
     A sample format:
     12345678: Genghis Khan (Mongols) vs. Khwarazm (Persians) on Arabia
@@ -86,8 +86,8 @@ def print_match_info(game):
         if map_entry['id'] == game['map_type']:
             map_name = map_entry['string']
             break
-    print("{!s}: {!s} ({!s}) vs. {!s} ({!s}) on {!s}"\
-          .format(game['match_id'],
-                  player0['name'], id_info['civ'][player0['civ']]['string'],
-                  player1['name'], id_info['civ'][player1['civ']]['string'],
-                  map_name))
+    return "{!s}: {!s} ({!s}) vs. {!s} ({!s}) on {!s}. Open game: https://aoe2.net/s/{!s}"\
+        .format(game['match_id'],
+                player0['name'], id_info['civ'][player0['civ']]['string'],
+                player1['name'], id_info['civ'][player1['civ']]['string'],
+                map_name, game['match_id'])

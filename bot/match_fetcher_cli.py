@@ -26,5 +26,6 @@ if __name__ == "__main__":
                         'in minutes. Decrease to make it more likely to see ' \
                         'a longer list of games. Default value is 10')
     args = parser.parse_args()
-    match_fetcher.get_live_matches(args.min_avg_rating, args.max_avg_rating, args.count,
-                     args.max_time_since_start)
+    print(match_fetcher.get_live_matches(args.min_avg_rating,
+                                         args.max_avg_rating, args.count,
+                                         args.max_time_since_start))
