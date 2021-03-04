@@ -3,7 +3,10 @@
 Typical usage example:
 # TODO: add usage examples.
 """
+
 import argparse
+import match_fetcher
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Get live matches in ' \
@@ -23,5 +26,5 @@ if __name__ == "__main__":
                         'in minutes. Decrease to make it more likely to see ' \
                         'a longer list of games. Default value is 10')
     args = parser.parse_args()
-    get_live_matches(args.min_avg_rating, args.max_avg_rating, args.count,
+    match_fetcher.get_live_matches(args.min_avg_rating, args.max_avg_rating, args.count,
                      args.max_time_since_start)
