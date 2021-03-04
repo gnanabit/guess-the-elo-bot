@@ -86,7 +86,7 @@ def match_info_string(game):
         if map_entry['id'] == game['map_type']:
             map_name = map_entry['string']
             break
-    return "{!s}: {!s} ({!s}) vs. {!s} ({!s}) on {!s}. Open game: https://aoe2.net/s/{!s}"\
+    return "{!s}: {!s} ({!s}) vs. {!s} ({!s}) on {!s}.\nOpen match in game: https://aoe2.net/s/{!s}"\
         .format(game['match_id'],
                 player0['name'], id_info['civ'][player0['civ']]['string'],
                 player1['name'], id_info['civ'][player1['civ']]['string'],
