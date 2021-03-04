@@ -46,12 +46,28 @@ async def get_match_between(ctx, min_elo: int, max_elo: int):
 
 @bot.command(name='GetMatch',
              help='Gets live matches without any elo constraints. Usage: !GetMatch')
-async def get_match_between(ctx):
+async def get_match(ctx):
     live_matches = match_fetcher.get_live_matches()
     if not live_matches:
         await ctx.send("Couldn't find any matches ... Is AoE2 down?")
-    response = random.choice(live_matches)
-    await ctx.send(response)
+    else:
+        response = random.choice(live_matches)
+        await ctx.send(response)
 
+@get_match_above.error
+async def get_match_above_error(ctx, error):
+    await ctx.send('Use !help to see the commands I know how to handle.')
+
+@get_match_below.error
+async def get_match_below_error(ctx, error):
+    await ctx.send('Use !help to see the commands I know how to handle.')
+
+@get_match_between.error
+async def get_match_between_error(ctx, error):
+    await ctx.send('Use !help to see the commands I know how to handle.')
+
+@get_match.error
+async def get_match_error(ctx, error):
+    await ctx.send('Use !help to see the commands I know how to handle.')
 
 bot.run(TOKEN)
