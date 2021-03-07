@@ -47,7 +47,24 @@ async def get_match_between(ctx, min_elo: int, max_elo: int):
 @bot.command(name='GetMatch',
              help='Gets live matches without any elo constraints. Usage: !GetMatch')
 async def get_match(ctx):
-    live_matches = match_fetcher.get_live_matches()
+    # Since ELOs are not uniformly distributed, if we randomly pick a game from
+    # the full live matches, then not all ELOs are equally likely to come up.
+    # Instead, randomly pick an ELO range and try to find a match from that
+    # range.
+    #
+    # There may be other reasonable ways to try to make the match ELO
+    # distribution more fair: e.g., get the live matches, put them into groups
+    # based on their ELO range, and pick a uniformly random one of the nonempty
+    # ranges, then pick a random game from the chosen range. In this way, all
+    # ELO ranges that are represented in live games should be equally likely.
+    # However, this method is chosen for simplicity.
+    min_elo = random.randint(5, 24) * 100
+    max_elo = min_elo + 200
+    live_matches = match_fetcher.get_live_matches(min_elo, max_elo)
+    if not live_matches:
+        # There are no matches in the ELO range -- we will give any live match,
+        # if one exists.
+        live_matches = match_fetcher.get_live_matches()
     if not live_matches:
         await ctx.send("Couldn't find any matches ... Is AoE2 down?")
     else:
